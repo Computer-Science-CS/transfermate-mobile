@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "transfermate",
+    "slug": "transfermate",
+    "version": "5.0.7",
+    "scheme": "transfermate",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0F204A"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "usesAppleSignIn": true,
+      "entitlements": {
+        "com.apple.developer.networking.wifi-info": "true"
+      },
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true
+      },
+      "bundleIdentifier": "com.transfermate",
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "supportsTablet": true,
+      "buildNumber": "10",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.559689709013-334jnr4ii69eof2fqb75e4bebh50thfc"
+        }
+      }
+    },
+    "facebookScheme": "fb387746075988221",
+    "facebookAppId": "387746075988221",
+    "facebookDisplayName": "Transfermate",
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "package": "com.transfermate",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "softwareKeyboardLayoutMode": "resize"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

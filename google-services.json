@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "45615297492",
+    "project_id": "transfermate-5d877",
+    "storage_bucket": "transfermate-5d877.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:45615297492:android:94a4241685c50ffafe1c41",
+        "android_client_info": {
+          "package_name": "com.transfermate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "45615297492-mgmsge5k0jr5ic6gqr7tkteofedlsus0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsOv2KUG-VzB8kl0UpaaGoBdN4F_EZh0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "45615297492-mgmsge5k0jr5ic6gqr7tkteofedlsus0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
