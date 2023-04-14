@@ -1,6 +1,7 @@
 {
   "header": {
-    "logout": "Sair"
+    "logout": "Sair",
+    "":""
   },
   "greetings": {
     "welcomeText": "Bem-vindo!",
@@ -46,7 +47,8 @@
     "Thepasswordmusthaveanumber": "A senha deve ter um número",
     "Passwordmusthaveaspecialcharacter": "A senha deve ter um caractere especial",
     "Passwordmustbeatleast": "A senha deve ter pelo menos oito caracteres",
-    "passwordisrequired": "senha é requerida", 
+    "passwordisrequired": "senha é requerida",
+    "passwordsmustmatch":"As senhas devem coincidir", 
     "registration": "Cadastro realizado com sucesso!",
     "errorRegistration": "E-mail já cadastrado!",
     "errorRegistrationLogin": "E-mail já está cadastrado em outro Provedor!",
@@ -64,6 +66,7 @@
     "proposalMessage": "Você recebeu uma proposta de",
     "successProposal": "Proposta enviada com sucesso!",
     "dangerProposal": "Uma proposta já foi enviada para essa solicitação",
+    "Requiredfield":"Campo obrigatório",
     "rating": "Avaliação",
     "ratingMessage": "Uma avaliação foi realizada em sua transação",
     "ratingSucces": "Avaliação enviada com sucesso!",
@@ -94,7 +97,8 @@
     "transactionFinished": "A transação foi finalizada com sucesso!",
     "errorTransaction": "Ocorreu algum erro ao atualizar a transação!",
 
-    "modalMessageRequired": "Mensagem é obrigatório para enviar proposta"
+    "modalMessageRequired": "Mensagem é obrigatório para enviar proposta",
+    "areyousureyouwanttoquit":"Tem certeza que deseja sair?"
   },
   "menu": {
     "settings": {

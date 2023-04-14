@@ -59,7 +59,7 @@ export default function ForgotPassword() {
       <S.GradientContainer colors={["#0B5393", "#041452"]}>
         <S.Header style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Ionicons onPress={handleGoBack} name="chevron-back" size={RFValue(20)} color="#cecece" />
-          <S.Title>Alterar senha</S.Title>
+          <S.Title>{I18n.t("buttons.changePassword")}</S.Title>
           <View />
         </S.Header>
 

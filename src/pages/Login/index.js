@@ -17,7 +17,6 @@ import * as WebBrowser from 'expo-web-browser'
 import firebase from 'firebase/app'
 import * as Facebook from 'expo-facebook'
 import 'firebase/auth'
-import * as GoogleSignIn from 'expo-google-sign-in'
 import * as AppleAuthentication from 'expo-apple-authentication'
 
 import { GoogleSignInMethod } from '../../services/signInMethods'
@@ -54,7 +53,7 @@ export default function Login() {
   const error = useSelector(state => state.error, shallowEqual)
   const dispatch = useDispatch()
   const { app, auth } = useContext(FirebaseContext)
-
+  
   const [loading, setLoading] = useState(false)
   const [availableAppleLogin, setAvailableAppleLogin] = useState(null)
   const [logo] = useState(new Animated.Value(0.2))
@@ -78,8 +77,8 @@ export default function Login() {
       .required(`${i18n.t('notifications.requiredPassword')}`)
   })
 
-  const initAsync = async () => {
-    await GoogleSignIn.initAsync()
+  const handleReset = async () => {
+    await auth.sendPasswordResetEmail('rpatriciop@gmail.com')
   }
 
   const signInAsync = async () => {
@@ -97,57 +96,81 @@ export default function Login() {
       console.log(response, 'AQUI')
       setLoading(false)
       if (response.status === 200) {
-        auth
-          .createUserWithEmailAndPassword(
+
+        const createResponse = await auth
+        .createUserWithEmailAndPassword(
+          user.email.toLowerCase(),
+          user.senha
+        );
+
+        // if(createResponse.additionalUserInfo.isNewUser){
+          const response = await auth
+          .signInWithEmailAndPassword(
             user.email.toLowerCase(),
             user.senha
           )
-          .then((createResponse) => {
-            if (createResponse.additionalUserInfo.isNewUser) {
-              auth
-                .signInWithEmailAndPassword(
-                  user.email.toLowerCase(),
-                  user.senha
-                )
-                .then(() => {
-                  setTimeout(() => {
-                    showMessage({
-                      type: "success",
-                      message: i18n.t("notifications.registration"),
-                      icon: { position: "right", icon: "success" },
-                      titleStyle: { fontSize: 16, textAlign: "center" },
-                      hideOnPress: true,
-                      duration: 5000,
-                    });
-                    dispatch(LoginUser(user, setLoading));
-                  }, 1850);
-                })
-                .catch((error) => {
-                  setLoading(false);
-                  showMessage({
-                    type: "danger",
-                    message: i18n.t("notifications.errorRegistrationLogin"),
-                    icon: { position: "right", icon: "danger" },
-                    titleStyle: { fontSize: 16, textAlign: "center" },
-                    hideOnPress: true,
-                    duration: 5000,
-                  });
-                });
-              return;
-            }
-          })
-          .catch((error) => {
-            console.log(error, 'ERRROOOOO')
-            setLoadingSignIn(false);
-            showMessage({
-              type: "danger",
-              message: i18n.t("notifications.errorRegistration"),
-              icon: { position: "right", icon: "danger" },
-              titleStyle: { fontSize: 16, textAlign: "center" },
-              hideOnPress: true,
-              duration: 5000,
-            });
+          showMessage({
+            type: "success",
+            message: i18n.t("notifications.registration"),
+            icon: { position: "right", icon: "success" },
+            titleStyle: { fontSize: 16, textAlign: "center" },
+            hideOnPress: true,
+            duration: 5000,
           });
+          dispatch(LoginUser(user, setLoading));
+        // }
+
+        // auth
+        //   .createUserWithEmailAndPassword(
+        //     user.email.toLowerCase(),
+        //     user.senha
+        //   )
+        //   .then((createResponse) => {
+        //     if (createResponse.additionalUserInfo.isNewUser) {
+        //       auth
+        //         .signInWithEmailAndPassword(
+        //           user.email.toLowerCase(),
+        //           user.senha
+        //         )
+        //         .then(() => {
+        //           setTimeout(() => {
+        //             showMessage({
+        //               type: "success",
+        //               message: i18n.t("notifications.registration"),
+        //               icon: { position: "right", icon: "success" },
+        //               titleStyle: { fontSize: 16, textAlign: "center" },
+        //               hideOnPress: true,
+        //               duration: 5000,
+        //             });
+        //             dispatch(LoginUser(user, setLoading));
+        //           }, 1850);
+        //         })
+        //         .catch((error) => {
+        //           setLoading(false);
+        //           showMessage({
+        //             type: "danger",
+        //             message: i18n.t("notifications.errorRegistrationLogin"),
+        //             icon: { position: "right", icon: "danger" },
+        //             titleStyle: { fontSize: 16, textAlign: "center" },
+        //             hideOnPress: true,
+        //             duration: 5000,
+        //           });
+        //         });
+        //       return;
+        //     }
+        //   })
+        //   .catch((error) => {
+        //     console.log(error, 'ERRROOOOO')
+        //     setLoadingSignIn(false);
+        //     showMessage({
+        //       type: "danger",
+        //       message: i18n.t("notifications.errorRegistration"),
+        //       icon: { position: "right", icon: "danger" },
+        //       titleStyle: { fontSize: 16, textAlign: "center" },
+        //       hideOnPress: true,
+        //       duration: 5000,
+        //     });
+        //   });
       }
     } catch (error) {
       console.log(error.response.data, 'ERRRRO')
@@ -162,7 +185,7 @@ export default function Login() {
                   setTimeout(() => {
                     showMessage({
                       type: "success",
-                      message: i18n.t("notifications.registration"),
+                      message: 'Login',
                       icon: { position: "right", icon: "success" },
                       titleStyle: { fontSize: 16, textAlign: "center" },
                       hideOnPress: true,
@@ -170,7 +193,9 @@ export default function Login() {
                     });
                     dispatch(LoginUser(user, setLoading));
                   }, 1850);
-                })
+                }).catch(e => {
+                  console.log(e, 'ERRO LOGIn')
+                }) 
       }catch(error){
         console.log('ERRRRROOR', error)
         setLoading(false);
@@ -572,6 +597,12 @@ export default function Login() {
               <TextBtn>{i18n.t('buttons.register')}</TextBtn>
             </BtnLight>
           </BtnContainer>
+
+          {/* <BtnContainer>
+            <BtnLight handleFunction={handleReset}>
+              <TextBtn>RESETAR DADOS</TextBtn>
+            </BtnLight>
+          </BtnContainer> */}
         </GradientContainer>
         <ForgotBtn style={{ backgroundColor: '#01062A' }}>
           <TextForgot>v7.0.8</TextForgot>

@@ -1,6 +1,5 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import * as GoogleSignIn from 'expo-google-sign-in';
 import * as AuthSession from 'expo-auth-session';
 
 export async function GoogleSignInMethod(setLoading) {

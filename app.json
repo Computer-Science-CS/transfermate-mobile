@@ -2,7 +2,7 @@
   "expo": {
     "name": "transfermate",
     "slug": "transfermate",
-    "version": "5.0.7",
+    "version": "8.0.0",
     "scheme": "transfermate",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,7 +20,7 @@
     "ios": {
       "usesAppleSignIn": true,
       "entitlements": {
-        "com.apple.developer.networking.wifi-info": "true"
+        "com.apple.developer.networking.wifi-info": true
       },
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true
@@ -28,12 +28,7 @@
       "bundleIdentifier": "com.transfermate",
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
-      "buildNumber": "10",
-      "config": {
-        "googleSignIn": {
-          "reservedClientId": "com.googleusercontent.apps.559689709013-334jnr4ii69eof2fqb75e4bebh50thfc"
-        }
-      }
+      "buildNumber": "10"
     },
     "facebookScheme": "fb387746075988221",
     "facebookAppId": "387746075988221",
@@ -49,6 +44,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f05ce225-4af9-480e-8b96-b7473550dea8"
+      }
     }
   }
 }

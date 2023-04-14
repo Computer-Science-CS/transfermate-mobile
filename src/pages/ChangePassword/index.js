@@ -36,12 +36,12 @@ export default function Password() {
   const FormSchema = yup.object().shape({
     senha: yup
       .string()
-      .matches(/\w*[a-z]\w*/, 'A senha deve ter uma letra minúscula')
-      .matches(/\w*[A-Z]\w*/, 'A senha deve ter uma letra maiúscula')
-      .matches(/\d/, "A senha deve ter um número")
+      .matches(/\w*[a-z]\w*/, I18n.t("notifications.Thepasswordmusthavealowercaseletter"))
+      .matches(/\w*[A-Z]\w*/, I18n.t("notifications.Thepasswordmusthaveanuppercaseletter"))
+      .matches(/\d/,I18n.t("notifications.Thepasswordmusthaveanumber"))
       .matches(
         /[!@#$%^&*()\-_"=+{}; :,<.>]/,
-        'A senha deve ter um caractere especial'
+        I18n.t("notifications.Passwordmusthaveaspecialcharacter")
       )
       .min(
         8,
@@ -53,8 +53,8 @@ export default function Password() {
       .required(`${I18n.t("notifications.requiredPassword")}`),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref('senha')], 'Senhas devem coincidir')
-      .required('Campo obrigatorio'),
+      .oneOf([yup.ref('senha')], I18n.t("notifications.passwordsmustmatch"))
+      .required(I18n.t("notifications.Requiredfield")),
   });
 
 

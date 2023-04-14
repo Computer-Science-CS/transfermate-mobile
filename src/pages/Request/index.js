@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import RNPickerSelect from "react-native-picker-select";
+// import RNPickerSelect from "react-native-picker-select";
+import {Picker} from '@react-native-picker/picker';
 import { Platform, View, Text, Keyboard, Pressable } from "react-native";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import Modal from "react-native-modal";
@@ -263,13 +264,14 @@ export default function Request() {
         >
           <RequestForm>
             <InputContainer>
-              <RNPickerSelect
+              <Picker
                 useNativeAndroidPickerStyle={false}
                 placeholder={{
                   label: i18n.t("placeholder.sourceCurrency"),
                   value: null,
                 }}
                 style={{
+                  backgroundColor: 'white',
                   inputAndroidContainer: {
                     height: RFValue(40),
                     borderRadius: 5,
@@ -300,23 +302,32 @@ export default function Request() {
                   },
                   placeholder: { color: "#5E5E5E" },
                 }}
-                value={request.moedaOrigemId}
+                selectedValue={request.moedaOrigemId}
                 onValueChange={(e) => {
                   setRequest({ ...request, moedaOrigemId: e });
                 }}
-                items={userOriginCoins}
-              />
+                // items={userOriginCoins}
+              >
+                {
+                  userOriginCoins.map(x => {
+                    return (
+                      <Picker.Item label={x.label} value={x.value} />
+                    )
+                  })
+                }
+              </Picker>
             </InputContainer>
 
 
             <InputContainer>
-              <RNPickerSelect
+              <Picker
                 useNativeAndroidPickerStyle={false}
                 placeholder={{
                   label: i18n.t("placeholder.destinationCurrency"),
                   value: null,
                 }}
                 style={{
+                  backgroundColor: 'white',
                   inputAndroidContainer: {
                     height: RFValue(40),
                     borderRadius: 5,
@@ -347,12 +358,20 @@ export default function Request() {
                   },
                   placeholder: { color: "#5E5E5E" },
                 }}
-                value={request.moedaDestinoId}
+                selectedValue={request.moedaDestinoId}
                 onValueChange={(e) => {
                   setRequest({ ...request, moedaDestinoId: e });
                 }}
-                items={userDestinyCoins}
-              />
+                // items={userDestinyCoins}
+              >
+                {
+                  userDestinyCoins.map(x => {
+                    return (
+                      <Picker.item value={x.value} label={x.label} />
+                    )
+                  })
+                }
+              </ Picker>
             </InputContainer>
             
                 <InputField

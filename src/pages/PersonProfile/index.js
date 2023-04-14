@@ -3,7 +3,9 @@ import { Alert } from "react-native";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useNavigation } from "@react-navigation/native";
-import RNPickerSelect from "react-native-picker-select";
+// import RNPickerSelect from "react-native-picker-select";
+import {Picker} from '@react-native-picker/picker';
+
 import { TextInputMask } from "react-native-masked-text";
 import { showMessage } from "react-native-flash-message";
 import i18n from "i18n-js";
@@ -213,7 +215,7 @@ export default function PersonProfile() {
   useEffect(() => {
     loadCountry();
     setProfile(user);
-    //console.log(profile);
+    // console.log(profile);
     if (profile.dataNascimento) setDate(moment(profile.dataNascimento).format(formatDateType));
   }, [user.id]);
 
@@ -301,13 +303,14 @@ export default function PersonProfile() {
             </InputContainer>
 
             <InputContainer>
-              <RNPickerSelect
+              <Picker
                 placeholder={{
                   label: `${i18n.t("personProfileScreen.profile.country")}`,
                   value: "",
                 }}
                 useNativeAndroidPickerStyle={false}
                 style={{
+                  backgroundColor: 'white',
                   inputAndroidContainer: {
                     height: RFValue(40),
                     borderRadius: 5,
@@ -339,19 +342,28 @@ export default function PersonProfile() {
                 onValueChange={(e) => {
                   setProfile({ ...profile, paisId: e });
                 }}
-                value={profile.paisId ? profile.paisId : '1'}
-                items={country}
-              />
+                selectedValue={profile.paisId ? profile.paisId : '1'}
+                // items={country}
+              >
+                {
+                  country.map(x => {
+                    return (
+                      <Picker.item label={x.label} value={x.value} />
+                    )
+                  })
+                }
+              </Picker>
             </InputContainer>
 
             <InputContainer>
-              <RNPickerSelect
+              <Picker
                 placeholder={{
                   label: `${i18n.t("personProfileScreen.profile.DDI")}`,
                   value: "",
                 }}
                 useNativeAndroidPickerStyle={false}
                 style={{
+                  backgroundColor: 'white',
                   inputAndroidContainer: {
                     height: RFValue(40),
                     borderRadius: 5,
@@ -383,9 +395,17 @@ export default function PersonProfile() {
                 onValueChange={(e) => {
                   setProfile({ ...profile, ddi: e });
                 }}
-                value={profile.ddi ? profile.ddi : '55'}
-                items={DDIList}
-              />
+                selectedValue={profile.ddi ? profile.ddi : '55'}
+                // items={DDIList}
+              >
+                {
+                  DDIList.map(x => {
+                    return (
+                      <Picker.item value={x.value} label={x.label} />
+                    )
+                  })
+                }
+              </Picker>
             </InputContainer>
 
             {/* <InputContainer marginBottom={15}>
@@ -421,7 +441,7 @@ export default function PersonProfile() {
             </InputContainer>
 
             <InputContainer>
-              <RNPickerSelect
+              <Picker
                 placeholder={{
                   label: `${i18n.t(
                     "personProfileScreen.profile.identityType"
@@ -430,6 +450,7 @@ export default function PersonProfile() {
                 }}
                 useNativeAndroidPickerStyle={false}
                 style={{
+                  backgroundColor: 'white',
                   inputAndroidContainer: {
                     height: RFValue(40),
                     borderRadius: 5,
@@ -461,9 +482,18 @@ export default function PersonProfile() {
                 onValueChange={(e) => {
                   setProfile({ ...profile, identificacaoTipo: e });
                 }}
-                value={profile.identificacaoTipo}
-                items={IdentityTypeList}
-              />
+                selectedValue={profile.identificacaoTipo}
+                // items={IdentityTypeList}
+              >
+                {
+                  IdentityTypeList.map(x => {
+                    return (
+                      <Picker.item value={x.value} label={x.label} />
+                    )
+                  })
+                }
+
+              </Picker>
             </InputContainer>
 
             <InputContainer>
@@ -479,7 +509,7 @@ export default function PersonProfile() {
             </InputContainer>
 
             <InputContainer>
-              <RNPickerSelect
+              <Picker
                 placeholder={{
                   label: `${i18n.t(
                     "personProfileScreen.profile.genderType.gender"
@@ -488,6 +518,7 @@ export default function PersonProfile() {
                 }}
                 useNativeAndroidPickerStyle={false}
                 style={{
+                  backgroundColor: 'white',
                   inputAndroidContainer: {
                     height: RFValue(40),
                     borderRadius: 5,
@@ -519,34 +550,67 @@ export default function PersonProfile() {
                 onValueChange={(e) => {
                   setProfile({ ...profile, genero: e });
                 }}
-                value={profile.genero}
-                items={[
-                  {
-                    label: `${i18n.t(
-                      "personProfileScreen.profile.genderType.male"
-                    )}`,
-                    value: "Masculino",
-                  },
-                  {
-                    label: `${i18n.t(
-                      "personProfileScreen.profile.genderType.female"
-                    )}`,
-                    value: "Feminino",
-                  },
-                  {
-                    label: `${i18n.t(
-                      "personProfileScreen.profile.genderType.others"
-                    )}`,
-                    value: "Outros",
-                  },
-                  {
-                    label: `${i18n.t(
-                      "personProfileScreen.profile.genderType.prefered"
-                    )}`,
-                    value: "Prefiro não dizer",
-                  },
-                ]}
-              />
+                selectedValue={profile.genero}
+                // items={[
+                //   {
+                //     label: `${i18n.t(
+                //       "personProfileScreen.profile.genderType.male"
+                //     )}`,
+                //     value: "Masculino",
+                //   },
+                //   {
+                //     label: `${i18n.t(
+                //       "personProfileScreen.profile.genderType.female"
+                //     )}`,
+                //     value: "Feminino",
+                //   },
+                //   {
+                //     label: `${i18n.t(
+                //       "personProfileScreen.profile.genderType.others"
+                //     )}`,
+                //     value: "Outros",
+                //   },
+                //   {
+                //     label: `${i18n.t(
+                //       "personProfileScreen.profile.genderType.prefered"
+                //     )}`,
+                //     value: "Prefiro não dizer",
+                //   },
+                // ]}
+              >
+                {
+                  [
+                    {
+                      label: `${i18n.t(
+                        "personProfileScreen.profile.genderType.male"
+                      )}`,
+                      value: "Masculino",
+                    },
+                    {
+                      label: `${i18n.t(
+                        "personProfileScreen.profile.genderType.female"
+                      )}`,
+                      value: "Feminino",
+                    },
+                    {
+                      label: `${i18n.t(
+                        "personProfileScreen.profile.genderType.others"
+                      )}`,
+                      value: "Outros",
+                    },
+                    {
+                      label: `${i18n.t(
+                        "personProfileScreen.profile.genderType.prefered"
+                      )}`,
+                      value: "Prefiro não dizer",
+                    },
+                  ].map(x => {
+                    return (
+                      <Picker.item value={x.value} label={x.label} />
+                    )
+                  })
+                }
+              </Picker>
             </InputContainer>
 
             <InputContainer>

@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { LogOut } from "../../redux/actions/actions";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import i18n from 'i18n-js'
 
 import {
   Container,
@@ -65,12 +66,12 @@ const Header = ({
         <ModalOpacity onPress={() => setModalVisible(!modalVisible)}>
           <ModalContainer>
 
-            <ModalTitle>Tem certeza que deseja sair?</ModalTitle>
+            <ModalTitle>{i18n.t('notifications.areyousureyouwanttoquit')}</ModalTitle>
 
             <ModalButtonBox style={{ flexDirection: 'row' }}>
 
-              <ModalButtom onPress={() => setModalVisible(!modalVisible)}><ModalText> Cancelar </ModalText></ModalButtom>
-              <ModalButtom onPress={() => handleLogOut()}><ModalText style={{color: '#808eef'}}> Sair </ModalText></ModalButtom>
+              <ModalButtom onPress={() => setModalVisible(!modalVisible)}><ModalText>{i18n.t('notifications.deleteMatchCancel')}</ModalText></ModalButtom>
+              <ModalButtom onPress={() => handleLogOut()}><ModalText style={{color: '#808eef'}}>{i18n.t('header.logout')}</ModalText></ModalButtom>
 
             </ModalButtonBox>
 

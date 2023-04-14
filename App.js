@@ -84,7 +84,7 @@ export default function App() {
   });
 
   const onLoad = async () => {
-    if (__DEV__) {
+    if (__DEV__ || true) {
       setUpdateMsg("Carregando...");
       _loadResourcesAsync().then(() => {
         setAssetsLoaded(true);
