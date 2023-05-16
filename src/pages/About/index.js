@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import i18n from "i18n-js";
 
 import Header from "../../components/Header";
+import expo from "../../../app.json";
 
 import Logo from "../../assets/logo/logo.png";
 
@@ -18,6 +19,9 @@ import {
 
 export default function About() {
   const navigation = useNavigation();
+
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
 
   return (
     <>
@@ -47,7 +51,8 @@ export default function About() {
           </LogoContent>
 
           <TextContent>
-            {i18n.t("menu.settings.version")} 1.1{"\n"}2021
+            {i18n.t("menu.settings.version")} {expo.expo.version} {"\n"}
+            {currentYear}
           </TextContent>
         </LogoContainer>
       </GradientContainer>

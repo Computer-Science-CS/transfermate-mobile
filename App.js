@@ -140,7 +140,8 @@ export default function App() {
         await Notifications.requestPermissionsAsync();
       }
     } else {
-      Alert.alert("Must use physical device for Push Notifications");
+      // Alert.alert("Must use physical device for Push Notifications");
+      console.log("Must use physical device for Push Notifications");
     }
   }
 

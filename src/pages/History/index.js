@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Alert, RefreshControl, ScrollView, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import i18n from "i18n-js";
@@ -32,7 +37,7 @@ import requestSolicitationRepository from "../../services/requestSolicitationRep
 
 import { formatCurrency } from "../../utils/format";
 import { formatMessage } from "../../utils/formatName";
-import { formatter } from '../../utils/moneyFormat'
+import { formatter } from "../../utils/moneyFormat";
 
 import {
   GradientContainer,
@@ -83,7 +88,7 @@ const orderMiddleware = {
 
 const filterMiddleware = {
   value: (item, [min, max]) => {
-    console.log(item.valorCentavos)
+    console.log(item.valorCentavos);
     return (
       item.valorCentavos >= (min ? parseFloat(min) : 0) &&
       (max ? item.valorCentavos <= parseFloat(max) : true)
@@ -213,8 +218,8 @@ export default function History() {
   }, [refreshingMatchs, login.usuario.id]);
 
   useEffect(() => {
-    refreshMyMatchs()
-  }, [activeTab])
+    refreshMyMatchs();
+  }, [activeTab]);
 
   const getMyMatchesTrades = () => {
     requestSolicitationRepository
@@ -264,6 +269,7 @@ export default function History() {
       avaliacaoGeral: starsSelected,
       avaliacaoTempoResposta: evaluationResponseTime,
       usuarioId: login.usuario.id,
+      usuarioId: itemProposalEvaluation.usuario?.id,
     };
 
     if (type === "solicitation") {
@@ -445,18 +451,21 @@ export default function History() {
   // Renderiza um match
   const renderMyMatchs = ({ item }) => {
     if (!item.ativo) return null;
-    console.log(item)
+    console.log(item);
     return (
-      
       <CardInfo
         cardRender="myMatchs"
         match={{
           nome: item.solicitacao.usuario.nome,
           moedaOrigemSimbolo: getSymbolFromCurrency(item.moedaOrigem?.simbolo),
-          moedaDestinoSimbolo: getSymbolFromCurrency(item.moedaDestino?.simbolo),
+          moedaDestinoSimbolo: getSymbolFromCurrency(
+            item.moedaDestino?.simbolo
+          ),
           moedaOrigemNome: item.moedaOrigem?.nome,
           moedaDestinoNome: item.moedaDestino.nome,
-          valor: formatter.format(item.solicitacao.valorCentavos).replace(/[^0-9.-]+/, ""),
+          valor: formatter
+            .format(item.solicitacao.valorCentavos)
+            .replace(/[^0-9.-]+/, ""),
           fotoUrl: item.solicitacao.usuario.fotoUrl,
           dataDisponibilidade: moment(
             item.solicitacao.dataDisponibilidade
@@ -551,8 +560,14 @@ export default function History() {
         userAvaliation={
           item.usuario.ratting ? item.usuario.ratting.toFixed(1) : 0
         }
-        userTotalAvaliation={item.usuario.avaliacoes ? item.usuario.avaliacoes : 0}
-        userTotalTransaction={item.usuario.transacoesRealizadas ? item.usuario.transacoesRealizadas : 0}
+        userTotalAvaliation={
+          item.usuario.avaliacoes ? item.usuario.avaliacoes : 0
+        }
+        userTotalTransaction={
+          item.usuario.transacoesRealizadas
+            ? item.usuario.transacoesRealizadas
+            : 0
+        }
         lastMessage={formatMessage(item.lastMessage)}
         cardRender="exchangeBid"
       />

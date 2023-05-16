@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { RefreshControl } from 'react-native'
+import { RefreshControl } from "react-native";
 import { useSelector, shallowEqual } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import i18n from "i18n-js";
@@ -37,44 +37,59 @@ export default function Rating() {
   const [totalRating, setTotalRating] = useState(0);
 
   const onRefreshMatchScreen = React.useCallback(async () => {
-    setRefreshing(true)
-    fetchEvaluation()
+    setRefreshing(true);
+    fetchEvaluation();
   }, [refreshing]);
 
   //evaluationRepository.getEvaluationByUserIdAvaliado(request.usuario.id)
 
   const fetchEvaluation = () => {
-    setLoading(true)
-    evaluationRepository.getEvaluations().then(res => {
-      const response = res.data.data
-      evaluationRepository.getEvaluationByUserId(user.usuario.id).then((rating) => {
-        const myRating = rating.data.data
-        const promise = myRating.map(async r => {
-          return {
-            ...r,
-            usuarioSolicitacao: (await userRepository.getUserDetailsById(r?.transacao?.proposta?.solicitacao?.usuarioId)).data.data,
-            usuarioProposta: (await userRepository.getUserDetailsById(r?.usuarioId)).data.data,
-          }
-        })
-        Promise.all(promise).then(res => {
-          if (myRating.length > 0) {
-            setLoading(false)
-            setRefreshing(false)
-            setEvaluations(res);
-            const totalRating = myRating.reduce((acc, obj) => {
-              return (acc += obj.avaliacaoGeral);
-            }, 0);
-            setTotalRating((totalRating / myRating.length).toFixed(1));
-          }
-          setLoading(false)
-          setRefreshing(false)
-        })
-      }).catch(error => {
-        setLoading(false)
+    setLoading(true);
+    evaluationRepository
+      .getEvaluations()
+      .then((res) => {
+        const response = res.data.data;
+        evaluationRepository
+          .getEvaluationByUserId(user.usuario.id)
+          .then((rating) => {
+            const myRating = rating.data.data;
+            console.log(myRating)
+            const promise = myRating.map(async (r) => {
+              return {
+                ...r,
+                usuarioSolicitacao: (
+                  await userRepository.getUserDetailsById(
+                    r?.transacao?.proposta?.solicitacao?.usuarioId
+                  )
+                ).data.data,
+                usuarioProposta: (
+                  await userRepository.getUserDetailsById(r?.usuarioId)
+                ).data.data,
+              };
+            });
+            Promise.all(promise).then((res) => {
+              if (myRating.length > 0) {
+                setLoading(false);
+                setRefreshing(false);
+                console.log("RESS");
+                console.log(res);
+                setEvaluations(res);
+                const totalRating = myRating.reduce((acc, obj) => {
+                  return (acc += obj.avaliacaoGeral);
+                }, 0);
+                setTotalRating((totalRating / myRating.length).toFixed(1));
+              }
+              setLoading(false);
+              setRefreshing(false);
+            });
+          })
+          .catch((error) => {
+            setLoading(false);
+          });
       })
-    }).catch(error => {
-      setLoading(false)
-    })
+      .catch((error) => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -86,9 +101,21 @@ export default function Rating() {
       <CardInfo
         cardRender="myRatings"
         evaluation={item}
-        userPhoto={user?.usuario?.id === item?.transacao?.proposta?.usuarioId ? item?.usuarioProposta?.fotoUrl : item?.usuarioSolicitacao?.fotoUrl}
-        userAvaliation={user?.usuario?.id ===  item?.transacao?.proposta?.usuarioId  ? item?.avaliacaoGeral : item?.avaliacaoGeral}
-        userName={user?.usuario?.id ===  item?.transacao?.proposta?.usuarioId  ? item?.usuarioProposta?.nome : item?.usuarioSolicitacao?.nome}
+        userPhoto={
+          user?.usuario?.id === item?.transacao?.proposta?.usuarioId
+            ? item?.usuarioProposta?.fotoUrl
+            : item?.usuarioSolicitacao?.fotoUrl
+        }
+        userAvaliation={
+          user?.usuario?.id === item?.transacao?.proposta?.usuarioId
+            ? item?.avaliacaoGeral
+            : item?.avaliacaoGeral
+        }
+        userName={
+          user?.usuario?.id !== item?.transacao?.proposta?.usuarioId
+            ? item?.usuarioProposta?.nome
+            : item?.usuarioSolicitacao?.nome
+        }
       />
     );
   };
@@ -119,8 +146,15 @@ export default function Rating() {
             <StarIcon />
           </IconsHeaderContainer>
           <TextButtonHeader>
-            {evaluations.length ? (evaluations.flatMap(x => x.avaliacaoGeral).reduce((a,b) => a + b) / evaluations.length).toFixed(1) : ' 0'}{" "}{i18n.t("personProfileScreen.myRating.ofRating")}
-            {" "}{evaluations.length}{" "}
+            {evaluations.length
+              ? (
+                  evaluations
+                    .flatMap((x) => x.avaliacaoGeral)
+                    .reduce((a, b) => a + b) / evaluations.length
+                ).toFixed(1)
+              : " 0"}{" "}
+            {i18n.t("personProfileScreen.myRating.ofRating")}{" "}
+            {evaluations.length}{" "}
             {evaluations.length <= 1
               ? i18n.t("personProfileScreen.myRating.rating")
               : i18n.t("personProfileScreen.myRating.ratings")}

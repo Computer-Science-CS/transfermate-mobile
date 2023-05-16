@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 // import RNPickerSelect from "react-native-picker-select";
-import {Picker} from '@react-native-picker/picker';
-import { Platform, View, Text, Keyboard, Pressable } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import userRepository from "../../services/userRepository/userRepository";
+import { Platform, View, Pressable, Alert } from "react-native";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import Modal from "react-native-modal";
 import { showMessage } from "react-native-flash-message";
@@ -13,6 +14,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { RFValue } from "react-native-responsive-fontsize";
 
 import { getMySolicitations } from "../../redux/actions/actions";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import {
   GradientContainer,
@@ -32,13 +34,14 @@ import { BtnLight } from "../../components/ButtonLight";
 import { InputField } from "../../components/Inputs";
 
 import requestRepository from "../../services/requestRepository/requestRepository";
+import SelectDropdown from "react-native-select-dropdown";
 
 export default function Request() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.login, shallowEqual);
-  const userCoins = useSelector((state) => state.userCoins, shallowEqual);
+
   const userDestinyCoins = useSelector(
     (state) => state.userDestinyCoins,
     shallowEqual
@@ -57,13 +60,42 @@ export default function Request() {
 
   const [request, setRequest] = useState({
     usuarioId: null,
-    moedaOrigemId: null,
-    moedaDestinoId: null,
+    moedaOrigemId: userOriginCoins[0] ? userOriginCoins[0].value : null,
+    moedaDestinoId: userDestinyCoins[0] ? userDestinyCoins[0].value : null,
     valorCentavos: null,
     dataDisponibilidade: "",
   });
 
+  const checkUserCoins = useCallback(() => {
+    setLoading(true);
+    console.log(i18n.t("request.alerts.id"));
+    userRepository
+      .getUserCoins(user.usuario?.id)
+      .then((response) => {
+        const check = response.data.data.length === 0 ? false : true;
+
+        if (!check) {
+          Alert.alert(
+            i18n.t("request.alerts.title"),
+            i18n.t("request.alerts.message"),
+            [
+              {
+                text: i18n.t("request.alerts.button"),
+                onPress: () => navigation.navigate("Currency"),
+                style: "default",
+              },
+            ]
+          );
+        }
+      })
+      .catch((error) => {
+        console.log("entrou");
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   const handleSubmitRequest = () => {
+    console.log(request);
     if (request.moedaDestinoId === null) {
       showMessage({
         type: "warning",
@@ -110,7 +142,7 @@ export default function Request() {
     }
 
     setLoading(true);
-    // let teste = realToCent(request.valorCentavos.toFixed(2).toString());
+    let teste = realToCent(request.valorCentavos.toFixed(2).toString());
 
     requestRepository
       .createNewRequest({
@@ -212,6 +244,12 @@ export default function Request() {
     return unsubscribe;
   }, [navigation]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => checkUserCoins());
+
+    return unsubscribe;
+  }, [checkUserCoins]);
+
   return (
     <>
       {loading && <Loader />}
@@ -264,122 +302,69 @@ export default function Request() {
         >
           <RequestForm>
             <InputContainer>
-              <Picker
-                useNativeAndroidPickerStyle={false}
-                placeholder={{
-                  label: i18n.t("placeholder.sourceCurrency"),
-                  value: null,
+              <SelectDropdown
+                defaultButtonText={i18n.t("placeholder.sourceCurrency")}
+                data={userOriginCoins}
+                onSelect={(e) => {
+                  setRequest({ ...request, moedaOrigemId: e.value });
                 }}
-                style={{
-                  backgroundColor: 'white',
-                  inputAndroidContainer: {
-                    height: RFValue(40),
-                    borderRadius: 5,
-                    backgroundColor: "#fcfcfc",
-                    justifyContent: "center",
-                  },
-                  inputAndroid: {
-                    paddingLeft: 5,
-                    paddingTop: 2.5,
-                    paddingBottom: 2.5,
-                    fontSize: RFValue(18),
-                    fontFamily: "sans-serif",
-                    color: "#3A3D43",
-                  },
-                  inputIOSContainer: {
-                    height: RFValue(40),
-                    borderRadius: 5,
-                    backgroundColor: "#fcfcfc",
-                    justifyContent: "center",
-                  },
-                  inputIOS: {
-                    paddingLeft: 5,
-                    paddingTop: 2.5,
-                    paddingBottom: 2.5,
-                    fontSize: RFValue(18),
-                    fontFamily: "Poppins_400Regular",
-                    color: "#3A3D43",
-                  },
-                  placeholder: { color: "#5E5E5E" },
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  return selectedItem.label;
                 }}
-                selectedValue={request.moedaOrigemId}
-                onValueChange={(e) => {
-                  setRequest({ ...request, moedaOrigemId: e });
+                rowTextForSelection={(item, index) => {
+                  return item.label;
                 }}
-                // items={userOriginCoins}
-              >
-                {
-                  userOriginCoins.map(x => {
-                    return (
-                      <Picker.Item label={x.label} value={x.value} />
-                    )
-                  })
-                }
-              </Picker>
+                renderDropdownIcon={(isOpened) => {
+                  return (
+                    <FontAwesome
+                      name={isOpened ? "chevron-up" : "chevron-down"}
+                      color={"#444"}
+                      size={18}
+                    />
+                  );
+                }}
+                buttonStyle={{
+                  width: "100%",
+                  borderRadius: 5,
+                }}
+              ></SelectDropdown>
             </InputContainer>
-
-
             <InputContainer>
-              <Picker
-                useNativeAndroidPickerStyle={false}
-                placeholder={{
-                  label: i18n.t("placeholder.destinationCurrency"),
-                  value: null,
+              <SelectDropdown
+                data={userDestinyCoins}
+                defaultButtonText={i18n.t("placeholder.destinationCurrency")}
+                onSelect={(e) => {
+                  setRequest({ ...request, moedaDestinoId: e.value });
                 }}
-                style={{
-                  backgroundColor: 'white',
-                  inputAndroidContainer: {
-                    height: RFValue(40),
-                    borderRadius: 5,
-                    backgroundColor: "#fcfcfc",
-                    justifyContent: "center",
-                  },
-                  inputAndroid: {
-                    paddingLeft: 5,
-                    paddingTop: 2.5,
-                    paddingBottom: 2.5,
-                    fontSize: RFValue(18),
-                    fontFamily: "sans-serif",
-                    color: "#3A3D43",
-                  },
-                  inputIOSContainer: {
-                    height: RFValue(40),
-                    borderRadius: 5,
-                    backgroundColor: "#fcfcfc",
-                    justifyContent: "center",
-                  },
-                  inputIOS: {
-                    paddingLeft: 5,
-                    paddingTop: 2.5,
-                    paddingBottom: 2.5,
-                    fontSize: RFValue(18),
-                    fontFamily: "Poppins_400Regular",
-                    color: "#3A3D43",
-                  },
-                  placeholder: { color: "#5E5E5E" },
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  return selectedItem.label;
                 }}
-                selectedValue={request.moedaDestinoId}
-                onValueChange={(e) => {
-                  setRequest({ ...request, moedaDestinoId: e });
+                rowTextForSelection={(item, index) => {
+                  return item.label;
                 }}
-                // items={userDestinyCoins}
-              >
-                {
-                  userDestinyCoins.map(x => {
-                    return (
-                      <Picker.item value={x.value} label={x.label} />
-                    )
-                  })
-                }
-              </ Picker>
+                dropdownIconPosition="right"
+                renderDropdownIcon={(isOpened) => {
+                  return (
+                    <FontAwesome
+                      name={isOpened ? "chevron-up" : "chevron-down"}
+                      color={"#444"}
+                      size={18}
+                    />
+                  );
+                }}
+                buttonStyle={{
+                  width: "100%",
+                  borderRadius: 5,
+                }}
+              ></SelectDropdown>
             </InputContainer>
-            
-                <InputField
-                  placeholder={i18n.t("placeholder.value")}
-                  typeInput="currency"
-                  value={request.valorCentavos}
-                  onChangeText={(e) => setRequest({ ...request, valorCentavos: e })}
-                />
+
+            <InputField
+              placeholder={i18n.t("placeholder.value")}
+              typeInput="currency"
+              value={request.valorCentavos}
+              onChangeText={(e) => setRequest({ ...request, valorCentavos: e })}
+            />
 
             <InputDateContainer>
               <Pressable
@@ -400,8 +385,8 @@ export default function Request() {
               <DateTimePicker
                 minimumDate={moment().add(1, "days").toDate()}
                 value={date}
-                mode={'date'}
-                display={'default'}                
+                mode={"date"}
+                display={"default"}
                 onChange={onChange}
                 textColor="red"
                 themeVariant="ligth"

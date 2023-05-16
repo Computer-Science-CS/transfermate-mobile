@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { KeyboardAvoidingView, Platform, View, Text } from 'react-native';
+import React, { useEffect, useState, useCallback } from "react";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { KeyboardAvoidingView, Platform, View, Text } from "react-native";
 import {
   GiftedChat,
   Bubble,
@@ -8,16 +8,16 @@ import {
   Composer,
   Message,
   MessageContainer,
-} from 'react-native-gifted-chat';
-import { showMessage } from 'react-native-flash-message';
-import { useNavigation } from '@react-navigation/native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { RFValue } from 'react-native-responsive-fontsize';
+} from "react-native-gifted-chat";
+import { showMessage } from "react-native-flash-message";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { RFValue } from "react-native-responsive-fontsize";
 
-import firebase from 'firebase/app';
-import moment from 'moment';
-import i18n, { t } from 'i18n-js';
-import 'firebase/functions';
+import firebase from "firebase/app";
+import moment from "moment";
+import i18n, { t } from "i18n-js";
+import "firebase/functions";
 
 import {
   GradientContainer,
@@ -37,23 +37,23 @@ import {
   ErrorText,
   ContainerModalButtons,
   TextBtn,
-} from './styles';
+} from "./styles";
 
-import Modal from '../../components/Modal';
-import Header from '../../components/Header';
-import Loader from '../../components/Loader';
-import { BtnLight } from '../../components/ButtonLight';
-import { InputField } from '../../components/Inputs';
+import Modal from "../../components/Modal";
+import Header from "../../components/Header";
+import Loader from "../../components/Loader";
+import { BtnLight } from "../../components/ButtonLight";
+import { InputField } from "../../components/Inputs";
 
-import requestSolicitationRepository from '../../services/requestSolicitationRepository/requestSolicitationRepository';
-import notificationRepository from '../../services/notificationRepository/notificationRepository';
-import transactionRepository from '../../services/transactionRepository/transactionRepository';
+import requestSolicitationRepository from "../../services/requestSolicitationRepository/requestSolicitationRepository";
+import notificationRepository from "../../services/notificationRepository/notificationRepository";
+import transactionRepository from "../../services/transactionRepository/transactionRepository";
 
-import { getAllRequests, getProposeById } from '../../redux/actions/actions';
-import { formatCurrency } from '../../utils/format';
-import { formatter } from '../../utils/moneyFormat';
-import getSymbolFromCurrency from 'currency-symbol-map';
-import requestRepository from '../../services/requestRepository/requestRepository';
+import { getAllRequests, getProposeById } from "../../redux/actions/actions";
+import { formatCurrency } from "../../utils/format";
+import { formatter } from "../../utils/moneyFormat";
+import getSymbolFromCurrency from "currency-symbol-map";
+import requestRepository from "../../services/requestRepository/requestRepository";
 
 const UserChat = ({ route }) => {
   const navigation = useNavigation();
@@ -71,20 +71,24 @@ const UserChat = ({ route }) => {
   const [transationData, setTransationData] = useState({
     id: oneProposal.id,
     //valorSolicitacaoFinal: null,
-    valorPropostaFinal: null,
+    valorPropostaFinal: 0,
   });
 
   useEffect(() => {
     dispatch(getProposeById(route.params.id, setLoading));
+    console.log("oneProposal");
+    console.log("oneProposal");
+    console.log("oneProposal");
+    console.log(oneProposal);
   }, [route.params.id]);
 
   useEffect(() => {
     const unsubscribe = firebase
       .firestore()
-      .collection('chat')
+      .collection("chat")
       .doc(oneProposal.firebaseId)
-      .collection('chats')
-      .orderBy('createdAt', 'desc')
+      .collection("chats")
+      .orderBy("createdAt", "desc")
       .onSnapshot((snapShot) =>
         setMessages(
           snapShot.docs.map((doc) => ({
@@ -117,9 +121,9 @@ const UserChat = ({ route }) => {
       dispatch(getAllRequests(user.usuario.id));
       firebase
         .firestore()
-        .collection('chat')
+        .collection("chat")
         .doc(oneProposal.firebaseId)
-        .collection('chats')
+        .collection("chats")
         .add(messages[0]);
       setMessages((previousMessages) =>
         GiftedChat.append(previousMessages, messages)
@@ -138,13 +142,13 @@ const UserChat = ({ route }) => {
   function handleSendNewNotification(token, title, message) {
     let data = {
       to: token,
-      sound: 'default',
+      sound: "default",
       title: title,
       body: message,
       data: { msg: message, title: title },
-      channelId: 'chat',
+      channelId: "chat",
       _displayInForeground: true,
-      priority: 'high',
+      priority: "high",
     };
     return notificationRepository.sendNewProposalNotication(data);
   }
@@ -155,18 +159,18 @@ const UserChat = ({ route }) => {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#C2C2C4',
+            backgroundColor: "#C2C2C4",
           },
           left: {
-            backgroundColor: '#EEECEE',
+            backgroundColor: "#EEECEE",
           },
         }}
         textStyle={{
           right: {
-            color: '#101957',
+            color: "#101957",
           },
           left: {
-            color: '#101957',
+            color: "#101957",
           },
         }}
       />
@@ -174,7 +178,7 @@ const UserChat = ({ route }) => {
   };
 
   function realToCent(value) {
-    const cents = value.replace(',', '').replace('.', '');
+    const cents = value.replace(",", "").replace(".", "");
 
     return Number(parseInt(cents, 10));
   }
@@ -190,23 +194,23 @@ const UserChat = ({ route }) => {
             handleSendNewNotification(
               oneProposal.usuario?.pushNotificationId,
               `${
-                oneProposal.usuario?.linguagem === 'pt' || true
-                  ? 'Proposta recusada'
-                  : 'Rejected proposal'
+                oneProposal.usuario?.linguagem === "pt" || true
+                  ? "Proposta recusada"
+                  : "Rejected proposal"
               }`,
               `${
-                oneProposal.usuario?.linguagem === 'pt' || true
-                  ? 'Sua proposta foi recusada!'
-                  : 'Your proposal was rejected!'
+                oneProposal.usuario?.linguagem === "pt" || true
+                  ? "Sua proposta foi recusada!"
+                  : "Your proposal was rejected!"
               }`
             );
           }
           dispatch(getAllRequests(user.usuario.id));
           showMessage({
-            type: 'success',
-            message: i18n.t('notifications.proposalRefused'),
-            icon: { icon: 'success', position: 'right' },
-            titleStyle: { fontSize: 16, textAlign: 'center' },
+            type: "success",
+            message: i18n.t("notifications.proposalRefused"),
+            icon: { icon: "success", position: "right" },
+            titleStyle: { fontSize: 16, textAlign: "center" },
             hideOnPress: true,
             duration: 5000,
           });
@@ -221,14 +225,14 @@ const UserChat = ({ route }) => {
 
   const confirmDeclineProposal = () => {
     Alert.alert(
-      `${i18n.t('chatScreen.confirmDeleteProposal')}`,
-      `${i18n.t('chatScreen.deleteProposalMessage')}`,
+      `${i18n.t("chatScreen.confirmDeleteProposal")}`,
+      `${i18n.t("chatScreen.deleteProposalMessage")}`,
       [
         {
-          text: i18n.t('notifications.deleteMatchCancel'),
+          text: i18n.t("notifications.deleteMatchCancel"),
         },
         {
-          text: i18n.t('notifications.deleteMatchOk'),
+          text: i18n.t("notifications.deleteMatchOk"),
           onPress: () => {
             declinePropose();
           },
@@ -308,23 +312,23 @@ const UserChat = ({ route }) => {
           handleSendNewNotification(
             oneProposal.solicitacao?.usuario?.pushNotificationId,
             `${
-              oneProposal.solicitacao?.usuario?.linguagem === 'pt' || true
-                ? 'Transação finalizada'
-                : 'Transaction completed'
+              oneProposal.solicitacao?.usuario?.linguagem === "pt" || true
+                ? "Transação finalizada"
+                : "Transaction completed"
             }`,
             `${
-              oneProposal.solicitacao?.usuario?.linguagem === 'pt' || true
-                ? 'A transação foi finalizada com sucesso!'
-                : 'Transaction completed successfully!'
+              oneProposal.solicitacao?.usuario?.linguagem === "pt" || true
+                ? "A transação foi finalizada com sucesso!"
+                : "Transaction completed successfully!"
             }`
           );
         }
         setLoading(false);
         showMessage({
-          type: 'success',
-          message: i18n.t('notifications.transactionFinished'),
-          icon: { icon: 'success', position: 'right' },
-          titleStyle: { fontSize: 16, textAlign: 'center' },
+          type: "success",
+          message: i18n.t("notifications.transactionFinished"),
+          icon: { icon: "success", position: "right" },
+          titleStyle: { fontSize: 16, textAlign: "center" },
           hideOnPress: true,
           duration: 5000,
         });
@@ -333,10 +337,10 @@ const UserChat = ({ route }) => {
     } catch (error) {
       setLoading(false);
       showMessage({
-        type: 'danger',
-        message: i18n.t('notifications.errorTransaction'),
-        icon: { icon: 'danger', position: 'right' },
-        titleStyle: { fontSize: 16, textAlign: 'center' },
+        type: "danger",
+        message: i18n.t("notifications.errorTransaction"),
+        icon: { icon: "danger", position: "right" },
+        titleStyle: { fontSize: 16, textAlign: "center" },
         hideOnPress: true,
         duration: 5000,
       });
@@ -352,23 +356,23 @@ const UserChat = ({ route }) => {
           handleSendNewNotification(
             oneProposal.usuario?.pushNotificationId,
             `${
-              oneProposal.usuario?.linguagem === 'pt' || true
-                ? 'Proposta aceita'
-                : 'Proposal accepted'
+              oneProposal.usuario?.linguagem === "pt" || true
+                ? "Proposta aceita"
+                : "Proposal accepted"
             }`,
             `${
-              oneProposal.usuario?.linguagem === 'pt' || true
-                ? 'Sua proposta foi aceita!'
-                : 'Your proposal has been accepted!'
+              oneProposal.usuario?.linguagem === "pt" || true
+                ? "Sua proposta foi aceita!"
+                : "Your proposal has been accepted!"
             }`
           );
         }
         setLoading(false);
         showMessage({
-          type: 'success',
-          message: i18n.t('notifications.proposalAccepted'),
-          icon: { icon: 'success', position: 'right' },
-          titleStyle: { fontSize: 16, textAlign: 'center' },
+          type: "success",
+          message: i18n.t("notifications.proposalAccepted"),
+          icon: { icon: "success", position: "right" },
+          titleStyle: { fontSize: 16, textAlign: "center" },
           hideOnPress: true,
           duration: 5000,
         });
@@ -382,19 +386,19 @@ const UserChat = ({ route }) => {
   function handleSendNewNotification(token, title, message) {
     let data = {
       to: token,
-      sound: 'default',
+      sound: "default",
       title: title,
       body: message,
       data: {
         msg: message,
         title: title,
         id: user.usuario.id,
-        type: 'chat',
-        url: 'UserChat',
+        type: "chat",
+        url: "UserChat",
       },
-      channelId: 'messages',
+      channelId: "messages",
       _displayInForeground: false,
-      priority: 'high',
+      priority: "high",
       autoDismiss: true,
     };
     return notificationRepository.sendNewProposalNotication(data);
@@ -404,7 +408,7 @@ const UserChat = ({ route }) => {
     if (oneProposal.usuarioId === user.usuario?.id) {
       if (
         oneProposal.solicitacao?.usuario?.fotoUrl &&
-        oneProposal.solicitacao?.usuario?.fotoUrl !== ''
+        oneProposal.solicitacao?.usuario?.fotoUrl !== ""
       ) {
         return (
           <ProfilePicture
@@ -414,19 +418,19 @@ const UserChat = ({ route }) => {
       } else {
         return (
           <UserImage>
-            <Ionicons name='person' size={RFValue(25)} color='#101957' />
+            <Ionicons name="person" size={RFValue(25)} color="#101957" />
           </UserImage>
         );
       }
     } else {
-      if (oneProposal.usuario?.fotoUrl && oneProposal.usuario?.fotoUrl !== '') {
+      if (oneProposal.usuario?.fotoUrl && oneProposal.usuario?.fotoUrl !== "") {
         return (
           <ProfilePicture source={{ uri: oneProposal.usuario?.fotoUrl }} />
         );
       } else {
         return (
           <UserImage>
-            <Ionicons name='person' size={RFValue(25)} color='#101957' />
+            <Ionicons name="person" size={RFValue(25)} color="#101957" />
           </UserImage>
         );
       }
@@ -475,7 +479,7 @@ const UserChat = ({ route }) => {
         logo={true}
         profileBtn={true}
         profileBtnFunction={() => {
-          navigation.navigate('Profile');
+          navigation.navigate("Profile");
         }}
       />
       {loading && <Loader container={false} />}
@@ -485,7 +489,7 @@ const UserChat = ({ route }) => {
           setIsModalOpen(false);
         }}
         isVisible={isModalOpen}
-        modalRender='acceptExchange'
+        modalRender="acceptExchange"
       >
         {/* <InputField
           placeholder={i18n.t("chatScreen.inputFinalValue")}
@@ -497,26 +501,29 @@ const UserChat = ({ route }) => {
         /> */}
 
         <TextStatus>
-          {i18n.t('chatScreen.modals.textAccept') +
-            transationData?.valorPropostaFinal?.toFixed(2).toString()}
+          {oneProposal?.transacao?.valorPropostaFinal
+            ? i18n.t("chatScreen.modals.textAccept") +
+              oneProposal?.transacao?.valorPropostaFinal?.toFixed(2).toString()
+            : i18n.t("chatScreen.modals.textAccept") +
+              transationData?.valorPropostaFinal?.toFixed(2).toString()}
         </TextStatus>
 
         <InputField
-          placeholder={i18n.t('chatScreen.inputProposalAccepted')}
-          typeInput='currency'
+          placeholder={i18n.t("chatScreen.inputProposalAccepted")}
+          typeInput="currency"
           //value={transationData.valorPropostaFinal}
           value={valueInput}
           onChangeText={
             (e) => {
-              handleChangeInputModal(e), setValueInput(e);
+              handleChangeInputModal(e ?? 0), setValueInput(e);
             }
             //setTransationData({ ...transationData, valorPropostaFinal: e })
           }
         />
 
-        <KeyboardAvoidingView behavior='height' />
+        <KeyboardAvoidingView behavior="height" />
         {error && (
-          <ErrorText>{i18n.t('chatScreen.modals.warninMessage2')}</ErrorText>
+          <ErrorText>{i18n.t("chatScreen.modals.warninMessage2")}</ErrorText>
         )}
 
         <ContainerModalButtons>
@@ -526,12 +533,12 @@ const UserChat = ({ route }) => {
               handleClickButtom();
             }}
           >
-            <TextBtn>{i18n.t('chatScreen.modals.textButton')}</TextBtn>
+            <TextBtn>{i18n.t("chatScreen.modals.textButton")}</TextBtn>
           </BtnLight>
         </ContainerModalButtons>
       </Modal>
 
-      <GradientContainer colors={['#0B5393', '#041452']}>
+      <GradientContainer colors={["#0B5393", "#041452"]}>
         <HeaderChat>
           {renderPhoto()}
           <ContainerUser>
@@ -550,25 +557,25 @@ const UserChat = ({ route }) => {
               <ProposeContainer>
                 <HeaderPropose>
                   <TextPropse>
-                    {i18n.t('chatScreen.requestInfo')}{' '}
-                    {getSymbolFromCurrency(oneProposal.moedaDestino?.simbolo)}{' '}
+                    {i18n.t("chatScreen.requestInfo")}{" "}
+                    {getSymbolFromCurrency(oneProposal.moedaDestino?.simbolo)}{" "}
                     {formatter
                       .format(oneProposal.solicitacao?.valorCentavos)
-                      .replace(/[^0-9.-]+/, '')}{' '}
+                      .replace(/[^0-9.-]+/, "")}{" "}
                     <MaterialCommunityIcons
-                      name='arrow-left-right'
+                      name="arrow-left-right"
                       size={RFValue(14)}
-                      color='#3a3d43'
-                    />{' '}
+                      color="#3a3d43"
+                    />{" "}
                     {getSymbolFromCurrency(oneProposal.moedaOrigem?.simbolo)} (
                     {oneProposal.moedaDestino?.nome})
                   </TextPropse>
 
-                  <TextPropse fontSize={RFValue(12)} color='#101957'>
-                    {i18n.t('chatScreen.availableRequest')}{' '}
+                  <TextPropse fontSize={RFValue(12)} color="#101957">
+                    {i18n.t("chatScreen.availableRequest")}{" "}
                     {moment(
                       oneProposal.solicitacao?.dataDisponibilidade
-                    ).format('DD/MM/YYYY')}
+                    ).format("DD/MM/YYYY")}
                   </TextPropse>
                 </HeaderPropose>
 
@@ -588,7 +595,7 @@ const UserChat = ({ route }) => {
                     }}
                   >
                     <ButtonAcceptExchangeText>
-                      {i18n.t('buttons.acceptProposal')}
+                      {i18n.t("buttons.acceptProposal")}
                     </ButtonAcceptExchangeText>
                   </ButtonAcceptExchange>
                 </HeaderButtonContainer>
@@ -607,8 +614,8 @@ const UserChat = ({ route }) => {
                     </TextPropse> */}
 
                     <TextPropse>
-                      {i18n.t('chatScreen.transactionTo')}{' '}
-                      {getSymbolFromCurrency(oneProposal.moedaOrigem?.simbolo)}{' '}
+                      {i18n.t("chatScreen.transactionTo")}{" "}
+                      {getSymbolFromCurrency(oneProposal.moedaOrigem?.simbolo)}{" "}
                       {formatCurrency(
                         oneProposal.transacao?.valorPropostaFinal?.toString()
                       )}
@@ -632,8 +639,8 @@ const UserChat = ({ route }) => {
                     </TextPropse> */}
 
                     <TextPropse>
-                      {i18n.t('chatScreen.transactionTo')}{' '}
-                      {getSymbolFromCurrency(oneProposal.moedaDestino.simbolo)}{' '}
+                      {i18n.t("chatScreen.transactionTo")}{" "}
+                      {getSymbolFromCurrency(oneProposal.moedaDestino.simbolo)}{" "}
                       {formatCurrency(
                         oneProposal.transacao?.valorPropostaFinal.toString()
                       )}
@@ -645,29 +652,29 @@ const UserChat = ({ route }) => {
         )}
         <GiftedChat
           timeTextStyle={{
-            right: { color: 'black' },
-            left: { color: 'black' },
+            right: { color: "black" },
+            left: { color: "black" },
           }}
           renderComposer={(props) => (
-            <Composer {...props} placeholder={t('chatScreen.inputChat')} />
+            <Composer {...props} placeholder={t("chatScreen.inputChat")} />
           )}
           renderSend={(props) => (
-            <Send label={i18n.t('chatScreen.sendMessage')} {...props} />
+            <Send label={i18n.t("chatScreen.sendMessage")} {...props} />
           )}
           renderChatFooter={() =>
             oneProposal.transacao?.status === 4 ||
             oneProposal.transacao?.status === 5 ? (
               <View
                 style={{
-                  width: '100%',
-                  backgroundColor: '#041452',
+                  width: "100%",
+                  backgroundColor: "#041452",
                   paddingBottom: 10,
                 }}
               >
                 <TextBtn fontSize={RFValue(18)}>
                   {oneProposal.transacao?.status === 4
-                    ? i18n.t('chatScreen.waitTransactionConfirmation')
-                    : i18n.t('chatScreen.transactionFinished')}
+                    ? i18n.t("chatScreen.waitTransactionConfirmation")
+                    : i18n.t("chatScreen.transactionFinished")}
                 </TextBtn>
               </View>
             ) : (
@@ -682,7 +689,7 @@ const UserChat = ({ route }) => {
           user={{ _id: user.usuario.id, nome: user.usuario.nome }}
         />
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? null : 'heigth'}
+          behavior={Platform.OS === "ios" ? null : "heigth"}
           keyboardVerticalOffset={0}
         />
       </GradientContainer>

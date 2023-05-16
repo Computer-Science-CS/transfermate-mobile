@@ -4,7 +4,7 @@ import * as AuthSession from 'expo-auth-session';
 
 export async function GoogleSignInMethod(setLoading) {
   const CLIENT_ID =
-    '45615297492-mgmsge5k0jr5ic6gqr7tkteofedlsus0.apps.googleusercontent.com';
+    '799309346752-vtn224jv28k76m8fvhkpq1jvfc6220g4.apps.googleusercontent.com';
   //const REDIRECT_URI = 'https://auth.expo.io/@vinicius.rebelo/transfermate';
   const REDIRECT_URI = 'https://auth.expo.io/@jonathanwssgp/transfermate';
   const SCOPE = encodeURI('profile email');

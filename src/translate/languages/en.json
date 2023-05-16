@@ -36,7 +36,7 @@
     "deleteRequest": "Excluir solicitação",
     "deleteProposal": "Excluir proposta",
     "acceptProposal": "Aceitar proposta",
-    "changePassword":"Trocar senha"
+    "changePassword": "Trocar senha"
   },
   "notifications": {
     "userErrorLogin": "Usuário ou senha inválido",
@@ -46,7 +46,7 @@
     "Thepasswordmusthaveanumber": "A senha deve ter um número",
     "Passwordmusthaveaspecialcharacter": "A senha deve ter um caractere especial",
     "Passwordmustbeatleast": "A senha deve ter pelo menos oito caracteres",
-    "passwordisrequired": "senha é requerida", 
+    "passwordisrequired": "senha é requerida",
     "registration": "Cadastro realizado com sucesso!",
     "errorRegistration": "E-mail já cadastrado!",
     "errorRegistrationLogin": "E-mail já está cadastrado em outro Provedor!",
@@ -75,25 +75,21 @@
     "deleteMatchOk": "Ok",
     "deleteMatchSuccess": "Match deletado com sucesso!",
     "deleteMacthError": "Erro ao deletar o match! Por favor, tente novamente",
-
     "currencyDangerOrigin": "Obrigatório selecionar pelo menos uma moeda de origem!",
     "currencyDangerDestiny": "Obrigatório selecionar pelo menos uma moeda de destino!",
     "currencyDangerBoth": "Obrigatório selecionar pelo menos uma moeda de origem e destino!",
     "currencySuccess": "Moedas atualizadas com sucesso!",
     "currencyError": "Ocorreu erro ao atualizar moedas, por favor, tente novamente",
-
     "warningDestinyCurrency": "É obrigatório selecionar a moeda de destino",
     "warningOriginCurrency": "É obrigatório selecionar a moeda de origem",
     "warningValueRequest": "É obrigatório ter um valor para criar a solicitação",
     "warningDateRequest": "É obrigatório ter uma data para criar a solicitação",
     "successRequest": "Solicitação criada com sucesso!",
     "errorRequest": "Ocorreu um erro ao criar a solicitação!",
-
     "proposalAccepted": "Proposta aceita com sucesso!",
     "proposalRefused": "Proposta recusada com sucesso!",
     "transactionFinished": "A transação foi finalizada com sucesso!",
     "errorTransaction": "Ocorreu algum erro ao atualizar a transação!",
-
     "modalMessageRequired": "Mensagem é obrigatório para enviar proposta"
   },
   "menu": {
@@ -196,7 +192,7 @@
         "activeSinse": "Ativo desde",
         "valueRequest": "Requisição de:",
         "availableUntil": "Disponível até",
-        "sendProposal": "Enviar proposta?"
+        "sendProposal": "Deseja enviar proposta?"
       }
     },
     "myMatchs": {
@@ -233,7 +229,6 @@
       "refuseButton": "Recusar",
       "exchangeCount": "transação feita",
       "exchangeCountS": "transaçōes feitas",
-
       "detailsButton": "Detalhes",
       "makeRating": "Fazer\navaliação",
       "goToChat": "Ir para chat",
@@ -247,6 +242,14 @@
     },
     "requestScreen": {
       "newRequest": "Criar nova solicitação"
+    }
+  },
+  "request": {
+    "alerts": {
+      "id": "Alert to be shown if user has no currency",
+      "title": "Warning",
+      "message": "Select to continue",
+      "button": "Select"
     }
   },
   "chatScreen": {
@@ -307,7 +310,7 @@
     },
     "myRating": {
       "ratingAndReview": "Minhas avaliações",
-      "ratingMessage": "Suas avaliações ficarão aqui após concluir transações",
+      "ratingMessage": "Suas avaliações ficarão aqui após concluir transações (As avaliações apenas estarão disponíveis depois de ambas as pessoas se avaliarem).",
       "ofRating": "de",
       "rating": "avaliação",
       "ratings": "avaliações"
